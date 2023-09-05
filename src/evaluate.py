@@ -18,6 +18,7 @@ import torch
 import torch.multiprocessing as mp
 import torchvision.transforms as transforms
 import numpy as np
+from PIL import ImageOps, Image
 
 import utils.misc as misc
 import metrics.preparation as pp
@@ -45,18 +46,57 @@ class Dataset_(Dataset):
     def __getitem__(self, index):
         img, label = self.data[index]
         return self.trsf(img), int(label)
+    
+class CenterCropLongEdge(object):
+    """
+    this code is borrowed from https://github.com/ajbrock/BigGAN-PyTorch
+    MIT License
+    Copyright (c) 2019 Andy Brock
+    """
+    def __call__(self, img):
+        return transforms.functional.center_crop(img, min(img.size))
 
+    def __repr__(self):
+        return self.__class__.__name__
+
+class LT_Dataset(Dataset):
+    def __init__(self, root, txt, resize_size, transform=None):
+        self.img_path = []
+        self.labels = []
+        self.transform = transform
+        self.resize_size = resize_size
+        self.trsf = transforms.Compose([CenterCropLongEdge(),transforms.Resize(self.resize_size, Image.LANCZOS),transforms.PILToTensor()])
+        with open(txt) as f:
+            for line in f:
+                self.img_path.append(line.split()[0])
+                self.labels.append(int(line.split()[1]))
+        
+    def __len__(self):
+        return len(self.labels)
+        
+    def __getitem__(self, index):
+
+        path = self.img_path[index]
+        label = self.labels[index]
+        
+        with open(path, 'rb') as f:
+            sample = Image.open(f).convert('RGB')
+        
+        if self.transform is not None:
+            sample = self.transform(sample)
+
+        return self.trsf(sample), int(label)
 
 def prepare_evaluation():
     parser = ArgumentParser(add_help=True)
-    parser.add_argument("-metrics", "--eval_metrics", nargs='+', default=['fid'],
+    parser.add_argument("-metrics", "--eval_metrics", nargs='+', default=['fid', 'is', 'prdc'],
                         help="evaluation metrics to use during training, a subset list of ['fid', 'is', 'prdc'] or none")
     parser.add_argument("--resize_fn", type=str, default="legacy", help="which mode to use PIL.bicubic resizing for calculating clean metrics\
                         in ['legacy', 'clean']")
     parser.add_argument('--eval_backbone', type=str, default='Inception_V3', help="[SwAV, Inception_V3]")
     parser.add_argument("--dset1", type=str, default="none", help="specify the directory of the folder that contains real images.")
     parser.add_argument("--dset2", type=str, default="none", help="specify the directory of the folder that contains generated images.")
-    parser.add_argument("--batch_size", default=256, type=int, help="batch_size for evaluation")
+    parser.add_argument("--batch_size", default=128, type=int, help="batch_size for evaluation")
 
     parser.add_argument("--seed", type=int, default=-1, help="seed for generating random numbers")
     parser.add_argument("-DDP", "--distributed_data_parallel", action="store_true")
@@ -96,17 +136,23 @@ def evaluate(local_rank, args, world_size, gpus_per_node):
     # -----------------------------------------------------------------------------
     # load dset1 and dset1.
     # -----------------------------------------------------------------------------
-    dset1 = Dataset_(data_dir=args.dset1)
-    #dset2 = Dataset_(data_dir=args.dset2) # modifying dset2 to contain iNaturalist dataset
-    dset2 = Dataset_cfgs(data_name="iNat19",
-                                 data_dir="../iNat19",
-                                 train=False,
-                                 crop_long_edge=True,
-                                 resize_size=256,
-                                 random_flip=False,
-                                 normalize=False,
-                    )
+    # dset1 = Dataset_(data_dir=args.dset1)
+    # #dset2 = Dataset_(data_dir=args.dset2) # modifying dset2 to contain iNaturalist dataset
+    # dset2 = Dataset_cfgs(data_name="iNat19",
+    #                              data_dir="../iNat19",
+    #                              train=False,
+    #                              crop_long_edge=True,
+    #                              resize_size=256,
+    #                              random_flip=False,
+    #                              normalize=False,
+    #                 )
 
+    resize_size = (64,64)
+    dset1 = LT_Dataset(root="/", txt = '/raid/varsha/data/iNaturalist19_val.txt', resize_size=resize_size)
+    #dset2 = Dataset_(data_dir=args.dset2) # modifying dset2 to contain iNaturalist dataset
+    dset2 = LT_Dataset(root="/", txt = '/raid/varsha/generated_64_64.txt', resize_size=resize_size)
+
+    
     if local_rank == 0:
         print("Size of dset1: {dataset_size}".format(dataset_size=len(dset1)))
         print("Size of dset2: {dataset_size}".format(dataset_size=len(dset2)))
@@ -165,6 +211,7 @@ def evaluate(local_rank, args, world_size, gpus_per_node):
                                       eval_model=eval_model,
                                       batch_size=batch_size,
                                       world_size=world_size,
+                                      quantize=True,
                                       DDP=args.distributed_data_parallel,
                                       device=local_rank,
                                       disable_tqdm=local_rank != 0)
@@ -174,6 +221,7 @@ def evaluate(local_rank, args, world_size, gpus_per_node):
                                       eval_model=eval_model,
                                       batch_size=batch_size,
                                       world_size=world_size,
+                                      quantize=True,
                                       DDP=args.distributed_data_parallel,
                                       device=local_rank,
                                       disable_tqdm=local_rank != 0)
