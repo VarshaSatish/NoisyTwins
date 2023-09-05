@@ -941,7 +941,10 @@ class WORKER(object):
             
             _ , indices = torch.sort(counts, descending=False)
             tail_cls_indices = labels[indices[j:j+n]]
-                            
+            
+            head_cls_indices = [101, 37, 53, 98, 69, 92, 48, 93, 147, 91, 35, 31, 103, 43, 21, 135, 124, 39, 123, 27, 78, 29, 51, 95, 23, 96, 114, 57, 30, 121, 54, 100]
+            tail_cls_indices = [689, 899, 553, 612, 813, 762, 784, 625, 364, 803, 633, 563, 929, 704, 893, 137, 506, 595, 833, 111, 462, 720, 868, 934, 957, 662, 756, 357, 928, 711, 780, 498]
+            
             for classes_type in  ["tail_", "head_"]:
                 if classes_type == "head_":
                     cls_indices = head_cls_indices

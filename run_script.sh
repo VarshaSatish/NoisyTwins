@@ -8,7 +8,7 @@ WANDB_API="" ## Fill your Personal WANDB Token Key Here.
 if [ "${DATASET}" = "iNat19" ]; then
     # iNat19
     CFG="src/configs/iNat19/StyleGAN2-SPD-ADA-LC-NoisyTwins.yaml"
-    DATA_DIR="./data"
+    DATA_DIR="/raid/varsha/data/"
     REF_SET="valid"
 elif [ "${DATASET}" = "imagenet_lt" ]; then
     # ImageNet-LT
@@ -60,7 +60,7 @@ elif [ "${TASK}" = "evaluate" ]; then
     METRICS="fid is prdc"  ## is prdc cannot be used with CLIP backbone.
 
     ## Fill run names in different lines in single string to evaluate multiple experiments one by one in loop.
-    CKPTS=""  
+    CKPTS="iNat19-StyleGAN2-SPD-ADA-LC-barlow-train-2022_11_02_16_01_27"  
     # "CIFAR10_LT-StyleGAN2-SPD-DiffAug-train-2022_10_20_15_43_42
     # CIFAR10_LT-StyleGAN2-SPD-DiffAug-train-2022_10_22_10_17_03"
 
@@ -89,7 +89,7 @@ elif [ "${TASK}" = "visualize" ]; then
     METRICS="none"
 
     ## Fill run names in different lines in single string to evaluate multiple experiments one by one in loop.
-    CKPTS=""  
+    CKPTS="iNat19-StyleGAN2-SPD-ADA-LC-barlow-train-2022_11_02_16_01_27"  
     # "CIFAR10_LT-StyleGAN2-SPD-DiffAug-train-2022_10_20_15_43_42
     # CIFAR10_LT-StyleGAN2-SPD-DiffAug-train-2022_10_22_10_17_03"
     
