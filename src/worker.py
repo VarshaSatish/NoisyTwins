@@ -941,10 +941,25 @@ class WORKER(object):
             
             _ , indices = torch.sort(counts, descending=False)
             tail_cls_indices = labels[indices[j:j+n]]
+            import os
+            num=[]
+            with open("/raid/varsha/data/iNaturalist19_train.txt") as fp:
+                for line in fp:
+                    num.append(line.split(' ')[1])
+                    # break
+            dict_counts=dict((x,num.count(x)) for x in set(num))
+            sorted_d = sorted(dict_counts.items(), key=operator.itemgetter(1), reverse=True)
+            sorted_a = sorted(dict_counts.items(), key=operator.itemgetter(1))
+            head_classes=[]
+            tail_classes=[]
+            for i in range(n):
+                tail_classes.append(int(sorted_a[i][0]))
+                head_classes.append(int(sorted_d[i][0]))
             
-            head_cls_indices = [101, 37, 53, 98, 69, 92, 48, 93, 147, 91, 35, 31, 103, 43, 21, 135, 124, 39, 123, 27, 78, 29, 51, 95, 23, 96, 114, 57, 30, 121, 54, 100]
-            tail_cls_indices = [689, 899, 553, 612, 813, 762, 784, 625, 364, 803, 633, 563, 929, 704, 893, 137, 506, 595, 833, 111, 462, 720, 868, 934, 957, 662, 756, 357, 928, 711, 780, 498]
-            
+            # head_cls_indices = [101, 37, 53, 98, 69, 92, 48, 93, 147, 91, 35, 31, 103, 43, 21, 135, 124, 39, 123, 27, 78, 29, 51, 95, 23, 96, 114, 57, 30, 121, 54, 100]
+            # tail_cls_indices = [689, 899, 553, 612, 813, 762, 784, 625, 364, 803, 633, 563, 929, 704, 893, 137, 506, 595, 833, 111, 462, 720, 868, 934, 957, 662, 756, 357, 928, 711, 780, 498]
+            head_cls_indices = head_classes
+            tail_cls_indices = tail_classes
             for classes_type in  ["tail_", "head_"]:
                 if classes_type == "head_":
                     cls_indices = head_cls_indices

@@ -148,7 +148,7 @@ class LT_Dataset(Dataset):
         return len(self.labels)
         
     def __getitem__(self, index):
-        print(index)
+        # print(index)
         path = self.img_path[index]
         label = self.labels[index]
         

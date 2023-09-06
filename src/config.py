@@ -119,13 +119,23 @@ class Configurations(object):
         self.MODEL.info_num_conti_c = "N/A"
         # dimension of discrete c to use in InfoGAN (one-hot)
         self.MODEL.info_dim_discrete_c = "N/A"
-                
+        self.MODEL.long_tailed_fake_labels: False
+        self.MODEL.sn_regularize_gen: False
+        self.MODEL.sn_regularize_dis: False
+        self.MODEL.shuffle_emb: False
+        self.MODEL.class_balanced_loss_based_on_effective_number_of_samples: False
+        self.MODEL.beta: 0.99
+        self.MODEL.sn_reg_weight_dis: 0.1
+        self.MODEL.sn_reg_weight_gen: 0.1
+        self.MODEL.num_power_iter: 4
+        self.MODEL.bool_sn_plots: False
+        
         self.MODEL.bool_plot_emb_norm = False
         self.MODEL.visualize_real = False
         self.MODEL.add_emb_noise = False
         self.MODEL.emb_noise_std = 0
         self.MODEL.effective_number_samples_beta = 0
-
+        
         # -----------------------------------------------------------------------------
         # loss settings
         # -----------------------------------------------------------------------------
