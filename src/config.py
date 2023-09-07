@@ -131,7 +131,7 @@ class Configurations(object):
         self.MODEL.bool_sn_plots: False
         
         self.MODEL.bool_plot_emb_norm = False
-        self.MODEL.visualize_real = True
+        self.MODEL.visualize_real = False
         self.MODEL.add_emb_noise = False
         self.MODEL.emb_noise_std = 0
         self.MODEL.effective_number_samples_beta = 0

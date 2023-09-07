@@ -97,7 +97,7 @@ def prepare_evaluation():
                         help="evaluation metrics to use during training, a subset list of ['fid', 'is', 'prdc'] or none")
     parser.add_argument("--resize_fn", type=str, default="legacy", help="which mode to use PIL.bicubic resizing for calculating clean metrics\
                         in ['legacy', 'clean']")
-    parser.add_argument('--eval_backbone', type=str, default='Inception_V3', help="[SwAV, Inception_V3]")
+    parser.add_argument('--eval_backbone', type=str, default='CLIP', help="[SwAV, Inception_V3]")
     parser.add_argument("--dset1", type=str, default="none", help="specify the directory of the folder that contains real images.")
     parser.add_argument("--dset2", type=str, default="none", help="specify the directory of the folder that contains generated images.")
     parser.add_argument("--batch_size", default=128, type=int, help="batch_size for evaluation")
@@ -156,11 +156,11 @@ def evaluate(local_rank, args, world_size, gpus_per_node):
     # #dset2 = Dataset_(data_dir=args.dset2) # modifying dset2 to contain iNaturalist dataset
     # dset2 = LT_Dataset(root="/", txt = '/raid/varsha/generated_64_64.txt', resize_size=resize_size)
     # resize_size = (64,64)
-    resize_size = (128,128)
+    resize_size = (64,64)
     print(resize_size)
     dset1 = LT_Dataset(root="/", txt = '/raid/varsha/data/iNaturalist19_val.txt', resize_size=resize_size)
     #dset2 = Dataset_(data_dir=args.dset2) # modifying dset2 to contain iNaturalist dataset
-    dset2 = LT_Dataset(root="/", txt = '/raid/varsha/generated_samples_128_128.txt', resize_size=resize_size)
+    dset2 = LT_Dataset(root="/", txt = '/raid/varsha/generated_samples_64_64_Lanczos.txt', resize_size=resize_size)
 
     
     if local_rank == 0:

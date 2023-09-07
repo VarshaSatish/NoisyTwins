@@ -905,6 +905,7 @@ class WORKER(object):
                     assert 0 <= self.RUN.truncation_factor, "truncation_factor must lie btw 0(strong truncation) ~ inf(no truncation)"
 
             # visualizing the real images as a canvas, with row as classes
+            # self.MODEL.visualize_real = True
             if self.MODEL.visualize_real:
                 num_batches = len(self.train_dataloader.dataset)//self.OPTIMIZATION.batch_size
                 iv_iter = iter(self.train_dataloader)
@@ -960,6 +961,11 @@ class WORKER(object):
             # tail_cls_indices = [689, 899, 553, 612, 813, 762, 784, 625, 364, 803, 633, 563, 929, 704, 893, 137, 506, 595, 833, 111, 462, 720, 868, 934, 957, 662, 756, 357, 928, 711, 780, 498]
             head_cls_indices = head_classes
             tail_cls_indices = tail_classes
+            print('*****************************')
+            print("head_cls_indices , ", head_cls_indices)
+            print("tail_cls_indices , ", tail_cls_indices)
+            print('*****************************')
+            
             for classes_type in  ["tail_", "head_"]:
                 if classes_type == "head_":
                     cls_indices = head_cls_indices
@@ -984,7 +990,9 @@ class WORKER(object):
                                                             mode="eval")
 
                 #visualize specific real classes
+                # self.MODEL.visualize_real = True
                 if self.MODEL.visualize_real:
+                    cls_indices = torch.tensor(cls_indices, dtype=torch.long).to(self.local_rank)
                     for i in range(cls_indices.cpu().shape[0]):
                         if i==0:
                             real_canvas = real['images'][real['labels']==cls_indices[i].cpu()][:num_cols]
