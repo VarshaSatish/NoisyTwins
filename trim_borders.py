@@ -6,7 +6,7 @@ def trim(im):
     bg = Image.new(im.mode, im.size, im.getpixel((0, 0)))
     try:
         diff = ImageChops.difference(im, bg)
-        diff = ImageChops.add(diff, diff, 2.0, 0)
+        # diff = ImageChops.add(diff, diff, 2.0, 0)
         bbox = diff.getbbox()
         im_trim = im.crop(bbox)
         if bbox:
@@ -16,24 +16,17 @@ def trim(im):
     except:
         return im
     
-rootdir = "/home/test/varsha/images/generated_samples_untrimmed/"
-dstdir = '/home/test/varsha/images/generated_samples_368_368/'
+rootdir = "/home/test/varsha/images/generated_samples_368_368/"
+dstdir = '/home/test/varsha/images/generated_samples_new/'
 os.makedirs(dstdir, exist_ok=True)
-# l = 0
-# size = (128,128)
+
+size = (64,64)
 for subdir, dirs, files in os.walk(rootdir):
-    # print(subdir, dirs)
     for file in files[:10]:
         print(file)
         im = Image.open("{}/{}".format(subdir, file))
-        # im_trim = im.resize(size, resample=0) 
         im_trim = trim(im)
-        # print(im_trim.size)
-        dst = subdir.replace('generated_samples_untrimmed', 'generated_samples_368_368')
-        # print(dst)
+        dst = subdir.replace('generated_samples_untrimmed', 'generated_samples_new')
         os.makedirs(dst, exist_ok=True)
         im_trim.save("{}/{}".format(dst, file))
-        # l += 1
-    #     exit()
-    # exit()
-# print(l)
+        print(im_trim.size)

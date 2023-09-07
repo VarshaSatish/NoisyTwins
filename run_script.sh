@@ -1,6 +1,6 @@
 #!/bin/sh
 
-TASK="evaluate" ## "train" "evaluate" "visualize"
+TASK="visualize" ## "train" "evaluate" "visualize"
 DATASET="iNat19" ## "iNat19" "imagenet_lt" "CIFAR10_LT" "Imgnet_carniv" "AnimalFace_FS"
 
 WANDB_API="3b9be378244bf306abfaad6203d9e61a88d41d53" ## Fill your Personal WANDB Token Key Here.
@@ -93,7 +93,8 @@ elif [ "${TASK}" = "visualize" ]; then
     METRICS="none"
 
     ## Fill run names in different lines in single string to evaluate multiple experiments one by one in loop.
-    CKPTS="iNat19-StyleGAN2-SPD-ADA-LC-barlow-train-2022_11_02_16_01_27"  
+    # CKPTS="iNat19-StyleGAN2-SPD-ADA-LC-barlow-train-2022_11_02_16_01_27"  #64*64
+    CKPTS="iNat19-StyleGAN2-SPD-ADA-LC-barlow-128-train-2023_01_28_12_09_11" #128*128
     # "CIFAR10_LT-StyleGAN2-SPD-DiffAug-train-2022_10_20_15_43_42
     # CIFAR10_LT-StyleGAN2-SPD-DiffAug-train-2022_10_22_10_17_03"
     
