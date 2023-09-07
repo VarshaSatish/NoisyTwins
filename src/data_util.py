@@ -181,7 +181,7 @@ class Dataset_(Dataset):
                  crop_long_edge=False,
                  resize_size=None,
                  random_flip=False,
-                 normalize=True,
+                 normalize=False,
                  hdf5_path=None,
                  load_data_in_memory=False):
         super(Dataset_, self).__init__()
@@ -193,26 +193,41 @@ class Dataset_(Dataset):
         self.hdf5_path = hdf5_path
         self.load_data_in_memory = load_data_in_memory
         self.trsf_list = []
-
+        
+        print("*******************")
+        # print("self.random_flip ", self.random_flip)
+        # print("self.normalize ",self.normalize)
         if self.hdf5_path is None:
             if crop_long_edge:
                 self.trsf_list += [CenterCropLongEdge()]
+                print("centercrop")
             if resize_size is not None:
                 self.trsf_list += [transforms.Resize(resize_size, Image.LANCZOS)]
+                print("resize")
+                
         else:
+            
             self.trsf_list += [transforms.ToPILImage()]
-
+            print("to pil")
+            
         if self.random_flip:
             self.trsf_list += [transforms.RandomHorizontalFlip()]
+            print("flip")
+            
 
         if self.normalize:
             self.trsf_list += [transforms.ToTensor()]
             self.trsf_list += [transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])]
+            print("norm")
+            
         else:
             self.trsf_list += [transforms.PILToTensor()]
+            print("last pil to ten")
 
         self.trsf = transforms.Compose(self.trsf_list)
-
+        print(self.trsf)
+        print("*******************")
+        
         self.load_dataset()
 
     def load_dataset(self):

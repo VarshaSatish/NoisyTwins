@@ -941,7 +941,7 @@ class WORKER(object):
             
             _ , indices = torch.sort(counts, descending=False)
             tail_cls_indices = labels[indices[j:j+n]]
-            import os
+            import os, operator
             num=[]
             with open("/raid/varsha/data/iNaturalist19_train.txt") as fp:
                 for line in fp:

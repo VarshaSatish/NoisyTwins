@@ -66,6 +66,10 @@ class LT_Dataset(Dataset):
         self.transform = transform
         self.resize_size = resize_size
         self.trsf = transforms.Compose([CenterCropLongEdge(),transforms.Resize(self.resize_size, Image.LANCZOS),transforms.PILToTensor()])
+        
+        # self.trsf = transforms.Compose([CenterCropLongEdge(),transforms.Resize(self.resize_size, Image.LANCZOS),transforms.PILToTensor()])
+        # self.trsf = transforms.Compose([transforms.Resize(self.resize_size, Image.LANCZOS),transforms.PILToTensor()])
+        
         with open(txt) as f:
             for line in f:
                 self.img_path.append(line.split()[0])
@@ -147,10 +151,16 @@ def evaluate(local_rank, args, world_size, gpus_per_node):
     #                              normalize=False,
     #                 )
 
-    resize_size = (64,64)
+    # resize_size = (64,64)
+    # dset1 = LT_Dataset(root="/", txt = '/raid/varsha/data/iNaturalist19_val.txt', resize_size=resize_size)
+    # #dset2 = Dataset_(data_dir=args.dset2) # modifying dset2 to contain iNaturalist dataset
+    # dset2 = LT_Dataset(root="/", txt = '/raid/varsha/generated_64_64.txt', resize_size=resize_size)
+    # resize_size = (64,64)
+    resize_size = (128,128)
+    print(resize_size)
     dset1 = LT_Dataset(root="/", txt = '/raid/varsha/data/iNaturalist19_val.txt', resize_size=resize_size)
     #dset2 = Dataset_(data_dir=args.dset2) # modifying dset2 to contain iNaturalist dataset
-    dset2 = LT_Dataset(root="/", txt = '/raid/varsha/generated_64_64.txt', resize_size=resize_size)
+    dset2 = LT_Dataset(root="/", txt = '/raid/varsha/generated_samples_128_128.txt', resize_size=resize_size)
 
     
     if local_rank == 0:

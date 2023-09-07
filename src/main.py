@@ -138,8 +138,12 @@ def load_configs_initialize_training():
 
     crop_long_edge = False if cfgs.DATA.name in cfgs.MISC.no_proc_data else True
     resize_size = None if cfgs.DATA.name in cfgs.MISC.no_proc_data else cfgs.DATA.img_size
+    print("resize : ", resize_size)
+    print("crop_long_edge : ", crop_long_edge)
+    print("cfgs.RUN.load_train_hdf5 : ", cfgs.RUN.load_train_hdf5)
+    print("cfgs.RUN.ref_dataset : ", cfgs.RUN.ref_dataset)
     if cfgs.RUN.load_train_hdf5:
-        hdf5_path_train, crop_long_edge, resize_size = hdf5.make_hdf5(name=cfgs.DATA.name,
+        hdf5_path_train, crop_long_edge_, resize_size_ = hdf5.make_hdf5(name=cfgs.DATA.name,
                                                                 img_size=cfgs.DATA.img_size,
                                                                 crop_long_edge=crop_long_edge,
                                                                 resize_size=resize_size,
@@ -147,7 +151,10 @@ def load_configs_initialize_training():
                                                                 DATA=cfgs.DATA,
                                                                 RUN=cfgs.RUN,
                                                                 split_type="train")
-        if cfgs.RUN.ref_dataset != "train":                                                        
+        print("hdf5_path_train : ",hdf5_path_train)
+        if cfgs.RUN.ref_dataset != "train":     
+            print("resize : ", resize_size)
+            print("crop_long_edge : ", crop_long_edge)                                                
             hdf5_path_eval, crop_long_edge, resize_size = hdf5.make_hdf5(name=cfgs.DATA.name,
                                                                     img_size=cfgs.DATA.img_size,
                                                                     crop_long_edge=crop_long_edge,
