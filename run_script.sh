@@ -1,14 +1,14 @@
 #!/bin/sh
 
-TASK="visualize" ## "train" "evaluate" "visualize"
+TASK="evaluate" ## "train" "evaluate" "visualize"
 DATASET="iNat19" ## "iNat19" "imagenet_lt" "CIFAR10_LT" "Imgnet_carniv" "AnimalFace_FS"
 
 WANDB_API="3b9be378244bf306abfaad6203d9e61a88d41d53" ## Fill your Personal WANDB Token Key Here.
 
 if [ "${DATASET}" = "iNat19" ]; then
     # iNat19
-    # CFG="src/configs/iNat19/StyleGAN2-SPD-ADA-LC-NoisyTwins-128.yaml"
-    CFG="src/configs/iNat19/StyleGAN2-SPD-ADA-LC-NoisyTwins.yaml"
+    CFG="src/configs/iNat19/StyleGAN2-SPD-ADA-LC-NoisyTwins-128.yaml"
+    # CFG="src/configs/iNat19/StyleGAN2-SPD-ADA-LC-NoisyTwins.yaml"
     DATA_DIR="/raid/varsha/data/"
     # DATA_DIR="/home/test/varsha/images/valid/"
     REF_SET="valid"
