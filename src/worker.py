@@ -1053,10 +1053,10 @@ class WORKER(object):
             self.num_eval[self.RUN.ref_dataset] = 50000
             ## also evaluating "prdc" and "is" metrics on 50k final evaluation along with FID.
             ## Clip do not provide logits, so removing "prdc" and "is" metrics for clip for now.
-            if self.RUN.eval_backbone == "CLIP":
-                assert "prdc" not in metrics and "is" not in metrics, "CLIP backbone does not support IS and PRDC metrics."
-            else:
-                metrics += ["is", "prdc"]
+            # if self.RUN.eval_backbone == "CLIP":
+            #     assert "prdc" not in metrics and "is" not in metrics, "CLIP backbone does not support IS and PRDC metrics."
+            # else:
+            metrics += ["is", "prdc"]
 
         with torch.no_grad() if not requires_grad else misc.dummy_context_mgr() as ctx:
             misc.make_GAN_untrainable(self.Gen, self.Gen_ema, self.Dis)

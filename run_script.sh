@@ -56,10 +56,10 @@ if [ "${TASK}" = "train" ]; then
 elif [ "${TASK}" = "evaluate" ]; then
     ## Evaluate the trained models for various metrics
 
-    EVAL_BACKBONE="CLIP" # "Inception_V3" ## "CLIP", 
+    EVAL_BACKBONE="MAE" # "Inception_V3" ## "CLIP","MAE" 
     ## CLIP is used only for evaluation of FID, and use only single GPU for evaluating using CLIP backbone (error otherwise). 
 
-    METRICS="fid" # is prdc"  ## is prdc cannot be used with CLIP backbone.
+    METRICS="fid is prdc"  ## is prdc cannot be used with CLIP backbone.
 
     ## Fill run names in different lines in single string to evaluate multiple experiments one by one in loop.
    

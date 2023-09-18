@@ -16,6 +16,8 @@ import torch.nn.functional as F
 import torchvision.transforms as transforms
 import numpy as np
 
+import metrics.model_mae_net as MAE
+
 from metrics.inception_net import InceptionV3
 import metrics.fid as fid
 import metrics.ins as ins
@@ -36,6 +38,11 @@ class LoadEvalModel(object):
         if device == 0 and logger is not None:
             logger.info(f"Load Evaluation Model using {eval_backbone} backbone.")
 
+        if self.eval_backbone == "MAE":
+            self.res, mean, std = 224, [0.485, 0.456, 0.406], [0.229, 0.224, 0.225]
+            self.model = MAE.prepare_model(resize_input=False, normalize_input=False).to(device)
+            print("loaded MAE")
+            
         if self.eval_backbone == "Inception_V3":
             self.res, mean, std = 299, [0.5, 0.5, 0.5], [0.5, 0.5, 0.5]
             self.model = InceptionV3(resize_input=False, normalize_input=False).to(device)
@@ -97,6 +104,10 @@ class LoadEvalModel(object):
             ## For now, keeping the logits = repres, which is wrong, but simply passing it here
             ## for the sake of return value. Also, logits are not used in FID Calculation.
             logits = repres 
+        elif self.eval_backbone == "MAE":
+            repres = self.model(x)
+            logits = repres 
+
         return repres, logits
 
 
