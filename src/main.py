@@ -135,13 +135,15 @@ def load_configs_initialize_training():
                                  data_name=cfgs.DATA.name,
                                  framework=cfgs.RUN.cfg_file.split("/")[-1][:-5],
                                  phase="train")
-
+    
+    cfgs.MODEL.backbone = 'MAE'
     crop_long_edge = False if cfgs.DATA.name in cfgs.MISC.no_proc_data else True
     resize_size = None if cfgs.DATA.name in cfgs.MISC.no_proc_data else cfgs.DATA.img_size
     print("resize : ", resize_size)
     print("crop_long_edge : ", crop_long_edge)
     print("cfgs.RUN.load_train_hdf5 : ", cfgs.RUN.load_train_hdf5)
     print("cfgs.RUN.ref_dataset : ", cfgs.RUN.ref_dataset)
+    print("1) backbone ", cfgs.MODEL.backbone)
     if cfgs.RUN.load_train_hdf5:
         hdf5_path_train, crop_long_edge_, resize_size_ = hdf5.make_hdf5(name=cfgs.DATA.name,
                                                                 img_size=cfgs.DATA.img_size,
@@ -167,7 +169,7 @@ def load_configs_initialize_training():
     else:
         hdf5_path_train, hdf5_path_eval = None, None
     cfgs.PRE.crop_long_edge, cfgs.PRE.resize_size = crop_long_edge, resize_size
-    cfgs.MODEL.backbone = 'MAE'
+    
     misc.prepare_folder(names=cfgs.MISC.base_folders, save_dir=cfgs.RUN.save_dir)
     misc.download_data_if_possible(data_name=cfgs.DATA.name, data_dir=cfgs.RUN.data_dir)
 

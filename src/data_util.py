@@ -258,7 +258,7 @@ class Dataset_(Dataset):
         elif self.data_name == "CUB200":
             self.data = CUB200(root=self.data_dir, train=self.train, download=True)
         elif self.data_name == "iNat19":
-            txt = '/raid/varsha/iNaturalist19_train.txt' if self.train == True else '/raid/varsha/iNaturalist19_val.txt'
+            txt = '/home/test/varsha/Long_tail/iNaturalist19_train.txt' if self.train == True else '/home/test/varsha/Long_tail/iNaturalist19_val.txt'
             self.data = LT_Dataset(self.data_dir, txt)
         elif self.data_name =="imagenet_lt":
             txt = './data/imagenet_lt/ImageNet_LT_train.txt' if self.train == True else './data/imagenet_lt/ImageNet_LT_val.txt'
