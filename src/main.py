@@ -167,7 +167,7 @@ def load_configs_initialize_training():
     else:
         hdf5_path_train, hdf5_path_eval = None, None
     cfgs.PRE.crop_long_edge, cfgs.PRE.resize_size = crop_long_edge, resize_size
-
+    cfgs.MODEL.backbone = 'MAE'
     misc.prepare_folder(names=cfgs.MISC.base_folders, save_dir=cfgs.RUN.save_dir)
     misc.download_data_if_possible(data_name=cfgs.DATA.name, data_dir=cfgs.RUN.data_dir)
 
@@ -184,7 +184,7 @@ def load_configs_initialize_training():
 
 if __name__ == "__main__":
     cfgs, gpus_per_node, run_name, hdf5_path_train, hdf5_path_eval, rank = load_configs_initialize_training()
-
+    print("backbone ", cfgs.MODEL.backbone)
     if cfgs.RUN.distributed_data_parallel and cfgs.OPTIMIZATION.world_size > 1:
         mp.set_start_method("spawn", force=True)
         print("Train the models through DistributedDataParallel (DDP) mode.")

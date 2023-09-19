@@ -6,9 +6,10 @@ import numpy as np
 import torch.nn as nn
 import matplotlib.pyplot as plt
 from PIL import Image
+import metrics.models_vit as models_vit
 from metrics.models_vit import interpolate_pos_embed
 from timm.models.layers import trunc_normal_
-import metrics.models_vit as models_vit
+from timm.utils import accuracy
 
 class Identity(nn.Module):
     def __init__(self):
