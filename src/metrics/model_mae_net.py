@@ -56,5 +56,5 @@ def prepare_model(chkpt_dir, arch='vit_base_patch16'):
         #     assert set(msg.missing_keys) == {'head.weight', 'head.bias'}
 
         # manually initialize fc layer
-        trunc_normal_(model.head.weight, std=2e-5)
+        # trunc_normal_(model.head.weight, std=2e-5)
     return model

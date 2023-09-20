@@ -40,10 +40,13 @@ class LoadEvalModel(object):
 
         if self.eval_backbone == "MAE":
             self.res, mean, std = 224, [0.485, 0.456, 0.406], [0.229, 0.224, 0.225]
-            self.model = MAE.prepare_model(resize_input=False, normalize_input=False).to(device)
+            chkpt_dir = '/raid/varsha/MAE/mae_pretrain_vit_base.pth'
+            # chkpt_dir = '/raid/varsha/MAE/fine_tuned_ckpt/mae_finetuned_vit_base.pth'
+            self.model = MAE.prepare_model(chkpt_dir, 'vit_base_patch16').to(device)
+            # self.model = MAE.prepare_model(resize_input=False, normalize_input=False).to(device)
             print("loaded MAE")
             
-        if self.eval_backbone == "Inception_V3":
+        elif self.eval_backbone == "Inception_V3":
             self.res, mean, std = 299, [0.5, 0.5, 0.5], [0.5, 0.5, 0.5]
             self.model = InceptionV3(resize_input=False, normalize_input=False).to(device)
         elif self.eval_backbone == "SwAV":

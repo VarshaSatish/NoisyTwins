@@ -136,7 +136,7 @@ def load_configs_initialize_training():
                                  framework=cfgs.RUN.cfg_file.split("/")[-1][:-5],
                                  phase="train")
     
-    cfgs.MODEL.backbone = 'MAE'
+    # cfgs.MODEL.backbone = 'MAE'
     crop_long_edge = False if cfgs.DATA.name in cfgs.MISC.no_proc_data else True
     resize_size = None if cfgs.DATA.name in cfgs.MISC.no_proc_data else cfgs.DATA.img_size
     print("resize : ", resize_size)

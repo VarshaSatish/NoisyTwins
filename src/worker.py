@@ -944,7 +944,7 @@ class WORKER(object):
             tail_cls_indices = labels[indices[j:j+n]]
             import os, operator
             num=[]
-            with open("/raid/varsha/data/iNaturalist19_train.txt") as fp:
+            with open("/home/test/varsha/Long_tail/iNaturalist19_train.txt") as fp:
                 for line in fp:
                     num.append(line.split(' ')[1])
                     # break
