@@ -45,14 +45,16 @@ class LoadEvalModel(object):
             self.model = MAE.prepare_model(chkpt_dir, 'vit_base_patch16').to(device)
             # self.model = MAE.prepare_model(resize_input=False, normalize_input=False).to(device)
             print("loaded MAE")
-            
+        elif self.eval_backbone == "DINO_V2":
+            self.res, mean, std = 224, [123.675, 116.28, 103.53], [58.395, 57.12, 57.375]
+            self.model = torch.hub.load('facebookresearch/dinov2', 'dinov2_vitb14_lc').to(device)
+
         elif self.eval_backbone == "Inception_V3":
             self.res, mean, std = 299, [0.5, 0.5, 0.5], [0.5, 0.5, 0.5]
             self.model = InceptionV3(resize_input=False, normalize_input=False).to(device)
         elif self.eval_backbone == "SwAV":
             self.res, mean, std = 224, [0.485, 0.456, 0.406], [0.229, 0.224, 0.225]
             self.model = torch.hub.load("facebookresearch/swav", "resnet50").to(device)
-
             hook_handles = []
             for name, layer in self.model.named_children():
                 if name == "fc":
@@ -108,6 +110,9 @@ class LoadEvalModel(object):
             ## for the sake of return value. Also, logits are not used in FID Calculation.
             logits = repres 
         elif self.eval_backbone == "MAE":
+            repres = self.model(x)
+            logits = repres 
+        elif self.eval_backbone == "DINO_V2":
             repres = self.model(x)
             logits = repres 
 
